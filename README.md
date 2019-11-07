@@ -4,3 +4,4 @@
  - Rest Service
  - Spring Security
  - JWT Security with custom Annotation
+ - Swagger UI
