@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import lab.microservice.labservice.annotations.JWTTokenNeeded;
 import lab.microservice.labservice.business.BusinessBase;
 import lab.microservice.labservice.exception.RetornoNegocioException;
 import lab.microservice.labservice.model.EntityBase;
@@ -46,7 +47,7 @@ public abstract class ServiceBase<T extends EntityBase> implements Serializable 
 		}
 	}
 
-	// @JWTTokenNeeded
+	@JWTTokenNeeded
 	@GetMapping("/{code}")
 	public ResponseEntity getById(@PathVariable long code, @RequestHeader("Authorization") String auth) {
 		try {

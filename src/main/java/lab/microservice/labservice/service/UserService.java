@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import lab.microservice.labservice.annotations.JWTTokenNeeded;
 import lab.microservice.labservice.business.BusinessBase;
 import lab.microservice.labservice.business.UserBusiness;
 import lab.microservice.labservice.model.User;
@@ -28,6 +29,5 @@ public class UserService extends ServiceBase<User> {
 	public ResponseEntity<String> test(){
 		return ResponseEntity.ok().body("Hello Users API");
 	}
-
 
 }
