@@ -1,7 +1,9 @@
 package lab.microservice.labservice.util;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -20,6 +22,8 @@ public class DbInitializationUtil implements InitializingBean {
 
 	@Autowired
 	UserBusiness userBusiness;
+
+	Faker faker = new Faker();
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -32,22 +36,41 @@ public class DbInitializationUtil implements InitializingBean {
 	}
 
 	private void createUsers() throws Exception {
-		Faker faker = new Faker();
 		
 		for (int i = 0; i < 10; i++) {
-			String firstName = faker.gameOfThrones().character();
-			
-			User user = User.builder()
-							.city(faker.gameOfThrones().city())
-							.email(firstName.toLowerCase().replace(" ", ".")+"@gameofthrones.com")
-							.name(firstName)
-							.phone(faker.phoneNumber().phoneNumber())
-							.salary(getRandomSalary())
-							.birthDate(getRandomBirthDate())
-							.build();
+			User user = getUser();
 			
 			userBusiness.salvar(user);
 		}
+	}
+
+	public User getUser() {
+		String firstName = faker.gameOfThrones().character();
+		
+		User user = User.builder()
+						.city(faker.gameOfThrones().city())
+						.email(firstName.toLowerCase().replace(" ", ".")+"@gameofthrones.com")
+						.name(firstName)
+						.phone(faker.phoneNumber().phoneNumber())
+						.salary(getRandomSalary())
+						.birthDate(getRandomBirthDate())
+						.build();
+		return user;
+	}
+	
+	public List<String> getCities(){
+		int size = 20;
+		List<String> list = new ArrayList<String>(size);
+		
+		for (int i = 0; i < size; i++) {
+			String city = faker.gameOfThrones().city();
+			while(list.contains(city))
+				city = faker.gameOfThrones().city();
+			
+			list.add(city);
+		}
+		
+		return list;
 	}
 
 	private Date getRandomBirthDate() {

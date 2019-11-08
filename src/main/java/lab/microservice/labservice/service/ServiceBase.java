@@ -62,6 +62,20 @@ public abstract class ServiceBase<T extends EntityBase> implements Serializable 
 		}
 	}
 
+	@GetMapping("/get/{code}")
+	public ResponseEntity getById(@PathVariable long code) {
+		try {
+			T obj = getBusiness().getObjeto(code);
+			if (obj != null)
+				return ResponseEntity.ok().body(obj);
+			else
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("NOT FOUND");
+		} catch (Exception e) {
+			return ResponseEntity.ok(RetornoNegocioException.builder().erro("Error trying to get object by Id")
+					.exception(e.getMessage()).build()).status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
 	@PostMapping("/list")
 	public ResponseEntity getListaPorAtributos(ParametroPesquisa pesquisa) {
 		try {
@@ -131,23 +145,21 @@ public abstract class ServiceBase<T extends EntityBase> implements Serializable 
 	}
 
 	@PostMapping("/save")
-	public ResponseEntity save(T entidade) {
+	public ResponseEntity save(@RequestBody T entidade) {
 		try {
 			getBusiness().salvar(entidade);
 			return ResponseEntity.ok(entidade);
 		} catch (Exception e) {
-			return ResponseEntity.ok(
-					RetornoNegocioException.builder().erro("Erro ao salvar registro").exception(e.getMessage()).build())
+			return ResponseEntity.ok().body(RetornoNegocioException.builder().erro("Erro ao salvar registro").exception(e.getMessage()).build())
 					.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
 
-	@DeleteMapping("/delete")
-	public ResponseEntity delete(T entidade) {
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity delete(@PathVariable long id) {
 		try {
-			long id = entidade.getId();
-			getBusiness().remover(entidade.getId());
-			return ResponseEntity.ok(JsonReturn.builder().message("Registro " + id + " removido com sucesso").build());
+			getBusiness().remover(id);
+			return ResponseEntity.ok(JsonReturn.builder().message("Data with id " + id + " removed").build());
 		} catch (Exception e) {
 			return ResponseEntity.ok(RetornoNegocioException.builder().erro("Erro ao remover registro")
 					.exception(e.getMessage()).build()).status(HttpStatus.INTERNAL_SERVER_ERROR).build();

@@ -2,6 +2,7 @@ package lab.microservice.labservice.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -25,9 +26,12 @@ import lombok.NoArgsConstructor;
 public class User extends EntityBase{
 	private static final long serialVersionUID = 8542522994899388913L;
 	
+	@Column(nullable=false)
 	private String name;
+	@Column(nullable=false)
 	private String email;
 	private String phone;
+	@Column(nullable=false)
 	private String city;
 	@JsonSerialize(using = JsonDateSerializer.class)
 	private Date birthDate;
