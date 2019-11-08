@@ -118,6 +118,18 @@ public abstract class ServiceBase<T extends EntityBase> implements Serializable 
 		}
 	}
 
+	@GetMapping("/all")
+	public ResponseEntity getListaTodos() {
+		try {
+			List<T> lista;
+			lista = getBusiness().getListaTodos();
+			return ResponseEntity.ok(lista);
+		} catch (Exception e) {
+			return ResponseEntity.ok(RetornoNegocioException.builder().erro("Erro ao realizar consulta getListaTodos")
+					.exception(e.getMessage()).build()).status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
 	@PostMapping("/save")
 	public ResponseEntity save(T entidade) {
 		try {
